@@ -1,0 +1,23 @@
+vector<int> Solution::repeatedNumber(const vector<int> &a) {
+  vector<int> ans;
+  int A,B;
+  long long sum1=0,sum2=0;
+  for(int i=0;i<a.size();i++){
+      sum1+=(long long)a[i];
+      sum2+=(long long)(i+1);
+  }
+  long long x,y,z;
+  x=sum1-sum2;//B-A
+  sum1=0,sum2=0;
+  for(int i=0;i<a.size();i++){
+      sum1+=(long long)a[i]*a[i];
+      sum2+=(long long)(i+1)*(i+1);
+  }
+  y=sum1-sum2;//(A+B)*(B-A)
+  z=y/x;//A+B
+  B=(x+z)/2;
+  A=z-B;
+   ans.push_back(B);
+  ans.push_back(A);
+   return ans;
+}
