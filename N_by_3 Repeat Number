@@ -1,0 +1,25 @@
+int Solution::repeatedNumber(const vector<int> &a) {
+    int num1=0,f1=0,num2=0,f2=0;
+    for(int i=0;i<a.size();i++){
+        if(f1==0 && a[i]!=num2){
+            f1++;
+            num1=a[i];
+        }
+        else if(f2==0 && a[i]!=num1){
+            f2++;
+            num2=a[i];
+        }
+       else if(num1==a[i]) f1++;
+        else if(num2==a[i]) f2++;
+        else {f1--;f2--;}
+    }
+   f1=0,f2=0;
+   for(int i=0;i<a.size();i++){
+       if(a[i]==num1) f1++;
+       if(a[i]==num2) f2++;
+   }
+   int ans=-1;
+  if(f1>(int)a.size()/3) ans=num1;
+    if(f2>(int)a.size()/3) ans=num2;
+    return ans;
+}
