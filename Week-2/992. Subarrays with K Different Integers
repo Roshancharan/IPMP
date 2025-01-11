@@ -1,0 +1,23 @@
+class Solution {
+public:
+
+    int helper(vector<int> arr,int k){
+        unordered_map<int,int> m;
+        int n=arr.size(),count=0,l=0,r=0;
+        while(r<n){
+            m[arr[r]]++;
+            while(m.size()>k){
+                m[arr[l]]--;
+                if(m[arr[l]]==0) m.erase(arr[l]);
+                l++;
+            }
+            if(m.size()<=k) count+=1+r-l;
+            r++;
+        }
+        return count;
+    }
+
+    int subarraysWithKDistinct(vector<int>& nums, int k) {
+        return helper(nums,k)-helper(nums,k-1);
+    }
+};
