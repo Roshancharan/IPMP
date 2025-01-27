@@ -1,0 +1,140 @@
+//{ Driver Code Starts
+#include <bits/stdc++.h>
+using namespace std;
+
+struct Node {
+    int data;
+    struct Node* next;
+    struct Node* bottom;
+
+    Node(int x) {
+        data = x;
+        next = NULL;
+        bottom = NULL;
+    }
+};
+
+void printList(Node* head) {
+    while (head != NULL) {
+        printf("%d ", head->data);
+        head = head->bottom;
+    }
+    printf("\n");
+}
+
+Node* createLinkedList(vector<Node*>& v) {
+    Node* head = new Node(0);
+    Node* temp = head;
+    int n = v.size();
+    for (int i = 0; i < n; i++) {
+        temp->next = v[i];
+        temp = temp->next;
+    }
+    return head->next;
+}
+
+
+// } Driver Code Ends
+/* Node structure  used in the program
+
+struct Node{
+    int data;
+    struct Node * next;
+    struct Node * bottom;
+
+    Node(int x){
+        data = x;
+        next = NULL;
+        bottom = NULL;
+    }
+
+};
+*/
+
+class Solution {
+  public:
+    struct mycomp {
+        bool operator()(pair<int, Node*> &a, pair<int, Node*> &b) {
+            return a.first > b.first; // Min-heap based on node data
+        }
+    };
+
+    Node *flatten(Node *root) {
+        if (!root) return nullptr;
+
+        // Min-heap to process nodes in sorted order
+        priority_queue<pair<int, Node*>, vector<pair<int, Node*>>, mycomp> p;
+
+        // Add all top-level nodes (next pointers) to the priority queue
+        Node *temp = root;
+        while (temp) {
+            p.push({temp->data, temp});
+            temp = temp->next;
+        }
+
+        // Dummy node to construct the result list
+        Node *dummy = new Node(-1);
+        Node *res = dummy;
+
+        // Process nodes from the priority queue
+        while (!p.empty()) {
+            int val = p.top().first;
+            Node *node = p.top().second;
+            p.pop();
+
+            // Link the current node to the result list
+            res->bottom = node;
+            res = res->bottom; // Advance the pointer in the flattened list
+
+            // Add the `bottom` node to the priority queue if it exists
+            if (node->bottom != nullptr) {
+                p.push({node->bottom->data, node->bottom});
+            }
+        }
+
+        return dummy->bottom; // Return the head of the flattened list
+    }
+};
+
+
+
+//{ Driver Code Starts.
+
+int main() {
+    int t;
+    cin >> t;
+    cin.ignore();
+    while (t--) {
+        int n;
+        cin >> n;
+        cin.ignore();
+
+        vector<Node*> v(n);
+
+        for (int i = 0; i < n; i++) {
+            string line;
+            getline(cin, line);
+            stringstream ss(line);
+
+            Node* head = new Node(0);
+            Node* temp = head;
+            int x;
+            while (ss >> x) {
+                Node* newNode = new Node(x);
+                temp->bottom = newNode;
+                temp = temp->bottom;
+            }
+            v[i] = head->bottom;
+        }
+
+        Solution ob;
+        Node* list = createLinkedList(v);
+        Node* head = ob.flatten(list);
+        printList(head);
+        cout << "~" << endl;
+    }
+
+    return 0;
+}
+
+// } Driver Code Ends
