@@ -1,0 +1,96 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+// Define a class for a binary tree node with data, left,
+// and right child pointers
+class Node {
+public:
+int data;
+Node* left;
+Node* right;
+Node(int data)
+{
+	this->data = data;
+	left = right = NULL;
+}
+};
+
+// Define a function to convert a binary tree to its double
+// tree
+void doubleTree(Node* root)
+{
+// If the root is NULL, return immediately
+if (!root) {
+	return;
+}
+
+// Create an empty stack and push the root node onto it
+stack<Node*> s;
+s.push(root);
+
+// Traverse the tree using the stack until it is empty
+while (!s.empty()) {
+	// Pop the top node from the stack
+	Node* node = s.top();
+	s.pop();
+
+	// If the node has a right child, push it onto the
+	// stack
+	if (node->right) {
+	s.push(node->right);
+	}
+
+	// If the node has a left child, push it onto the
+	// stack
+	if (node->left) {
+	s.push(node->left);
+	}
+
+	// Create a duplicate node of the current node and
+	// set it as the left child of the current node
+	Node* old_left = node->left;
+	node->left = new Node(node->data);
+
+	// Set the original left child of the current node
+	// as the left child of the duplicate node
+	node->left->left = old_left;
+}
+}
+
+// Define a function to print the inorder traversal of a
+// binary tree
+void printInorder(Node* root)
+{
+if (!root) {
+	return;
+}
+printInorder(root->left);
+cout << root->data << " ";
+printInorder(root->right);
+}
+
+// Driver program to test the above functions
+int main()
+{
+// Construct a binary tree
+Node* root = new Node(1);
+root->left = new Node(2);
+root->right = new Node(3);
+root->left->left = new Node(4);
+root->left->right = new Node(5);
+
+// Print the original tree
+cout << "Original tree is : " << endl;
+printInorder(root);
+cout << endl;
+
+// Convert the binary tree to its double tree
+doubleTree(root);
+
+// Print the inorder traversal of the double tree
+cout << "Inorder traversal of double tree is : "
+	<< endl;
+printInorder(root);
+
+return 0;
+}
