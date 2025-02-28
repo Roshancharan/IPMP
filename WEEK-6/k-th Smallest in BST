@@ -141,3 +141,31 @@ int main() {
     return 0;
 }
 // } Driver Code Ends
+
+
+
+
+
+
+
+
+
+//****************
+
+class Solution {
+  public:
+    // Return the Kth smallest element in the given BST
+    int res=-1;
+    void helper(Node *root,int &k){
+        if(!root) return;
+        helper(root->left,k);
+        if(--k==0) res= root->data;
+        helper(root->right,k);
+        // return right;
+    }
+    
+    int kthSmallest(Node *root, int k) {
+        helper(root,k);
+        return res;
+    }
+};
