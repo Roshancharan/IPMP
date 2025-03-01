@@ -1,0 +1,77 @@
+// C++ program to Remove all nodes which
+// don’t lie in any path with sum>= k
+#include <bits/stdc++.h>
+using namespace std;
+
+class Node {
+public:
+    int data;
+    Node* left, *right;
+    Node (int x) {
+        data = x;
+        left = nullptr;
+        right = nullptr;
+    }
+};
+
+bool pruneTree(Node* root, int k) {
+    
+    // If path has ended, check if it 
+    // satisfies the sum.
+    if (root == nullptr) return k<=0;
+    
+    // Check for left and right subtrees.
+    bool left = pruneTree(root->left, k-root->data);
+    bool right = pruneTree(root->right, k-root->data);
+    
+    // If any path on left or right subtree does not 
+    // have required sum, then delete the current Node
+    // and return false.
+    if (left==false && right==false) {
+        delete(root);
+        return false;
+    }
+    
+    // Set left node as null, if it has been
+    // deleted.
+    else if (left == false) {
+        root->left = nullptr;
+    }
+    
+    // Set right node as null, if it has been
+    // deleted.
+    else if (right == false) {
+        root->right = nullptr;
+    }
+    
+    return true;
+}
+
+void inOrder(Node* root) {
+    if (root == nullptr) return;
+    
+    inOrder(root->left);
+    cout << root->data << " ";
+    inOrder(root->right);
+}
+
+int main() {
+    
+    // Binary tree
+    //       1
+    //      / \
+    //     2   3
+    //   / \    \
+    //  3   5    2
+    Node* root = new Node(1);
+    root->left = new Node(2);
+    root->right = new Node(3);
+    root->left->left = new Node(3);
+    root->left->right = new Node(5);
+    root->right->right = new Node(2);
+    
+    int k = 7;
+    pruneTree(root, k); 
+    inOrder(root);
+    return 0;
+}
