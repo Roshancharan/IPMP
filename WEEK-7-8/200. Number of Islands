@@ -1,0 +1,33 @@
+class Solution {
+
+void dfs(vector<vector<char>>& grid,int i,int j,vector<vector<bool>>& vis){
+    vis[i][j]=1;
+int n=grid.size(),m=grid[0].size(),res=0;
+    for(int k=-1;k<=1;k+=2){
+        int r,c;
+        r=i+k,c=j;
+        if((r>=0&&r<n)&&(c<m&&c>=0)&&!vis[r][c]&&grid[r][c]=='1') dfs(grid,r,c,vis);
+
+         r=i,c=k+j;
+        if((r>=0&&r<n)&&(c<m&&c>=0)&&!vis[r][c]&&grid[r][c]=='1') dfs(grid,r,c,vis);
+    }
+}
+
+public:
+    int numIslands(vector<vector<char>>& grid) {
+        int n=grid.size(),m=grid[0].size(),res=0;
+
+vector<vector<bool>> vis(n,vector<bool>(m,0));
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                if(!vis[i][j]&&grid[i][j]=='1'){ 
+                    dfs(grid,i,j,vis);
+                     res++;
+                     }
+               
+            }
+        }
+
+        return res;
+    }
+};
