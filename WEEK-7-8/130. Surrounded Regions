@@ -1,0 +1,44 @@
+class Solution {
+
+ void bfs(vector<vector<char>> &mat,int i,int j){
+         int n=mat.size(),m=mat[0].size();
+        queue<pair<int,int>> q;
+        q.push({i,j});
+        mat[i][j]='#';
+        while(!q.empty()){
+            int row=q.front().first,coln=q.front().second;
+            q.pop();
+            for(int i=-1;i<=1;i++){
+                if((row+i>=0&&row+i<n)&&mat[row+i][coln]=='O'){
+                    q.push({row+i,coln});
+                    mat[row+i][coln]='#';
+                }
+                 if((coln+i>=0&&coln+i<m)&&mat[row][coln+i]=='O'){
+                    q.push({row,coln+i});
+                    mat[row][coln+i]='#';
+                }
+            }
+        }
+    }
+
+public:
+    void solve(vector<vector<char>>& mat) {
+          int n=mat.size(),m=mat[0].size();
+       
+       for(int i=0;i<n;i++){
+           if(mat[i][0]=='O') bfs(mat,i,0);
+           if(mat[i][m-1]=='O') bfs(mat,i,m-1);
+       }
+        for(int i=0;i<m;i++){
+           if(mat[0][i]=='O') bfs(mat,0,i);
+           if(mat[n-1][i]=='O') bfs(mat,n-1,i);
+       }
+       
+       for(int i=00;i<n;i++){
+           for(int j=0;j<m;j++){
+               if(mat[i][j]=='O') mat[i][j]='X';
+               if(mat[i][j]=='#') mat[i][j]='O';
+           }
+       }
+    }
+};
