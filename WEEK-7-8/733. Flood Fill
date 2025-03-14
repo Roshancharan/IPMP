@@ -1,0 +1,27 @@
+class Solution {
+
+void dfs(vector<vector<int>>& image, int sr, int sc,vector<vector<bool>> &vis, int color,int curr){
+    image[sr][sc]=color;
+    vis[sr][sc]=1;
+ int n=image.size(),m=image[0].size();
+    for(int i=-1;i<=1;i+=2){
+        int row,coln;
+        row=sr+i,coln=sc;
+        if((row>=0&&row<n)&&(coln>=0&&coln<m)&&(image[row][coln]==curr)&&!vis[row][coln]) dfs(image,row,coln,vis,color,curr);
+
+        row=sr,coln=i+sc;
+        if((row>=0&&row<n)&&(coln>=0&&coln<m)&&(image[row][coln]==curr)&&!vis[row][coln]) dfs(image,row,coln,vis,color,curr);
+    }
+}
+
+public:
+    vector<vector<int>> floodFill(vector<vector<int>>& image, int sr, int sc, int color) {
+        int curr=image[sr][sc];
+        if(curr==color) return image;
+        int n=image.size(),m=image[0].size();
+
+        vector<vector<bool>> vis(n,vector<bool>(m,0));
+        dfs(image,sr,sc,vis,color,curr);
+        return image;
+    }
+};
