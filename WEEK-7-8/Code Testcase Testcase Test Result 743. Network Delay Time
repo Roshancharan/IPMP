@@ -1,0 +1,38 @@
+class Solution {
+public:
+    int networkDelayTime(vector<vector<int>>& times, int n, int k) {
+        vector<pair<int,int>> adj[n+1];
+
+        for(auto x:times){
+            adj[x[0]].push_back({x[1],x[2]});
+        }
+
+        vector<int> dis(n+1,1e9);
+          priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> q;
+        dis[k]=0;
+        q.push({0,k});
+
+        while(!q.empty()){
+            auto temp=q.top();
+            q.pop();
+            int node=temp.second;
+            int dist=temp.first;
+
+            for(auto x:adj[node]){
+                if(dis[x.first]>dis[node]+x.second){
+                    dis[x.first]=dis[node]+x.second;
+                    q.push({dis[x.first],x.first});
+                }
+            }
+        }
+
+        int res=INT_MIN;
+
+        for(int i=1;i<=n;i++){
+            if(dis[i]==1e9) return -1;
+            else res=max(res,dis[i]);
+        }
+
+        return res;
+    }
+};
