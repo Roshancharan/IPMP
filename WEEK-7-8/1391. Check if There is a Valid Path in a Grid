@@ -1,0 +1,44 @@
+class Solution {
+public:
+    bool hasValidPath(vector<vector<int>>& grid) {
+        vector<pair<int, int>> paths[7] = {
+            {}, 
+            {{0, 1}, {0, -1}},  // Street type 1: left ↔ right
+            {{1, 0}, {-1, 0}},  // Street type 2: top ↕ bottom
+            {{0, -1}, {1, 0}},  // Street type 3: left ⬊ bottom
+            {{0, 1}, {1, 0}},   // Street type 4: right ⬋ bottom
+            {{0, -1}, {-1, 0}}, // Street type 5: left ⬈ top
+            {{-1, 0}, {0, 1}}   // Street type 6: top ⬉ right
+        };
+
+        int m = grid.size(), n = grid[0].size();
+        vector<vector<bool>> vis(m, vector<bool>(n, false));
+        queue<pair<int, int>> q;
+        q.push({0, 0});
+        vis[0][0] = true;
+
+        while (!q.empty()) {
+            auto [r, c] = q.front();
+            q.pop();
+            if (r == m - 1 && c == n - 1) return true;
+
+            for (auto [dr, dc] : paths[grid[r][c]]) {
+                int nr = r + dr, nc = c + dc;
+                if (nr >= 0 && nr < m && nc >= 0 && nc < n && !vis[nr][nc]) {
+                    for (auto [ndr, ndc] : paths[grid[nr][nc]]) {
+                        if (nr + ndr == r && nc + ndc == c) {
+                            q.push({nr, nc});
+                            vis[nr][nc] = true;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+};
+
+
+
