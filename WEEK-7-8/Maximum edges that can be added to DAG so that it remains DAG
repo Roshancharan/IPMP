@@ -1,0 +1,71 @@
+/*
+here the idea is first we find one topological sort and then from left to right we find if there is no edge between 
+those nodes then we make edge and add to result this will never lead to cycle but adding 1 extra edge will form cycle
+
+direct formula=v*(v-1)/2 -e;
+*/
+
+
+#include<bits/stdc++.h>
+using namespace std;
+
+void add_edge(vector<int> adj[],int i,int j){
+    adj[i].push_back(j);
+}
+
+vector<int> topo_sort(vector<int> adj[],int v){
+    vector<int> res,indeg(v,0);
+    queue<int> q;
+
+    for(int i=0;i<v;i++){
+        for(int x:adj[i]){
+            indeg[x]++;
+        }
+    }
+
+    
+    for(int i=0;i<v;i++){
+       if(indeg[i]==0) q.push(i);
+    }
+
+    while(!q.empty()){
+        int node =q.front();
+        q.pop();
+        res.push_back(node);
+
+        for(int x:adj[node]){
+            indeg[x]--;
+            if(indeg[x]==0) q.push(x);
+        }
+    }
+
+    return res;
+}
+
+int main(){
+    int v=6;
+
+    vector<int> adj[v];
+    add_edge(adj,5,2);
+    add_edge(adj,5,0);
+    add_edge(adj,4,0);
+    add_edge(adj,4,1);
+    add_edge(adj,2,3);
+    add_edge(adj,3,1);
+//4-5 4-2 4-3 5-3 5-1 2-0 2-1 0-3 0-1 is the answer
+    vector<int> top_sort=topo_sort(adj,v);
+
+    vector<pair<int,int>> extra;
+
+    for(int i=0;i<v;i++){
+        vector<bool> vis(v,0);
+        for(int j:adj[top_sort[i]]){
+                vis[j]=1;
+        }
+        for(int j=i+1;j<v;j++){
+            if(!vis[top_sort[j]]) extra.push_back({top_sort[i],top_sort[j]});
+        }
+    }
+
+    for(auto x:extra) cout<<x.first<<"->"<<x.second<<endl;
+}
