@@ -1,0 +1,31 @@
+class Solution {
+public:
+    vector<int> findOrder(int numCourses, vector<vector<int>>& prerequisites) {
+        vector<int> adj[numCourses];
+        vector<int> res,indeg(numCourses,0);
+        queue<int> q;
+
+        for(auto cource:prerequisites){
+            adj[cource[1]].push_back(cource[0]);
+            indeg[cource[0]]++;
+        }
+
+        for(int i=0;i<numCourses;i++){
+            if(indeg[i]==0) q.push(i);
+        }
+
+        while(!q.empty()){
+            int node =q.front();
+            q.pop();
+            res.push_back(node);
+
+            for(int x:adj[node]){
+                indeg[x]--;
+                if(indeg[x]==0) q.push(x);
+            }
+        }
+
+        if(res.size()!=numCourses) return {};
+        else return res;
+    }
+};
