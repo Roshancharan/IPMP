@@ -1,0 +1,48 @@
+class Solution {
+    vector<int> parent,rank;
+
+    void initialize(int n){
+        for(int i=0;i<n;i++){
+            parent.push_back(i);
+            rank.push_back(0);
+        }
+    }
+
+int find(int x){
+    if(x==parent[x]) return x;
+    parent[x]=find(parent[x]);
+     return parent[x];
+}
+
+void make_union(int x,int y){
+    int x_rep=find(x);
+    int y_rep=find(y);
+    if(x_rep==y_rep) return;
+    if(rank[x_rep]>rank[y_rep]){
+        parent[y_rep]=x_rep;
+        rank[x_rep]++;
+    }else {
+        parent[x_rep]=y_rep;
+        rank[y_rep]++;
+    }
+}
+
+public:
+    vector<int> findRedundantConnection(vector<vector<int>>& edges) {
+        int n=edges.size()+1;
+
+        initialize(n);
+
+        vector<int> res;
+
+        for(auto edge:edges){
+            if(find(edge[0])==find(edge[1])){
+                res.push_back(edge[0]);res.push_back(edge[1]);
+            }else{
+                make_union(edge[0],edge[1]);
+            }
+        }
+
+        return res;
+    }
+};
